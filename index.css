@@ -689,26 +689,137 @@ header h1 {
 }
 
 @media (max-width: 768px) {
-  .app-container {
-    flex-direction: column;
-    margin-top: 1rem;
+  body {
+    background: #ffffff;
+    font-size: 15px;
   }
-  
+
+  .app-container {
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+  }
+
   #sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     flex-basis: auto;
+    width: 100%;
+    border-radius: 0;
+    padding: 0.7rem 0.85rem 0.8rem;
+    box-shadow: 0 3px 12px rgba(15, 35, 55, 0.08);
+    border-bottom: 1px solid var(--border-color);
   }
 
   header {
-    padding: 1rem;
+    padding: 0.85rem 1rem;
   }
 
   header h1 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  #course-selector,
+  #topic-list {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #course-selector::-webkit-scrollbar,
+  #topic-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  #course-selector {
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .course-btn,
+  #topic-list .topic-item {
+    flex: 0 0 auto;
+    min-height: 40px;
+    max-width: 230px;
+    padding: 0.55rem 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  #topic-list .topic-item {
+    margin-bottom: 0;
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+  }
+
+  #topic-list .topic-item.active {
+    border-left: 1px solid var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: calc(0.55rem - 2px);
+  }
+
+  .category-header {
+    display: none;
+  }
+
+  #content-area {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 1rem;
+    min-height: auto;
+  }
+
+  #topic-title {
+    display: block;
+    margin-bottom: 1rem;
+    padding-bottom: 0.55rem;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .question-card,
+  .section-card {
+    padding: 0.9rem 1rem;
+    border-radius: 6px;
+  }
+
+  .question-text {
+    font-size: 1rem;
+  }
+
+  .huafu-page {
+    font-size: 0.95rem;
+  }
+
+  .huafu-hero,
+  .huafu-topic-header {
+    border-left-width: 4px;
+    padding: 0.1rem 0 1rem 0.85rem;
+    border-bottom-width: 2px;
+    margin-bottom: 1rem;
   }
 
   .huafu-hero h2,
   .huafu-topic-header h2 {
-    font-size: 1.8rem;
+    font-size: 1.55rem;
+    line-height: 1.18;
+  }
+
+  .huafu-hero p,
+  .huafu-topic-header p {
+    margin-top: 0.55rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
   }
 
   .huafu-info-grid,
@@ -718,9 +829,95 @@ header h1 {
   .huafu-phrase-grid.compact,
   .huafu-flow-grid {
     grid-template-columns: 1fr;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .huafu-info-card,
+  .huafu-reading-card,
+  .huafu-section,
+  .huafu-sample-card,
+  .huafu-universal-box,
+  .huafu-argument-panel,
+  .huafu-expression-card,
+  .huafu-flow-card {
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+    min-height: auto;
+  }
+
+  .huafu-reading-card,
+  .huafu-section,
+  .huafu-sample-card,
+  .huafu-universal-box,
+  .huafu-debate-topic {
+    margin-bottom: 1rem;
+  }
+
+  .huafu-reading-card h3,
+  .huafu-section h3,
+  .huafu-sample-card h3,
+  .huafu-universal-box h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .huafu-reading-card p,
+  .huafu-argument-panel li,
+  .huafu-expression-card p,
+  .huafu-sample-line p,
+  .huafu-flow-card p {
+    line-height: 1.5;
+  }
+
+  .huafu-reading-card p {
+    font-size: 0.96rem;
+  }
+
+  .huafu-debate-topic {
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
   }
 
   .huafu-debate-topic p {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .huafu-argument-panel h3,
+  .huafu-expression-card h4 {
+    font-size: 1rem;
+  }
+
+  .huafu-phrase-card,
+  .huafu-sample-line {
+    border-radius: 6px;
+    padding: 0.8rem 0.9rem;
+    min-height: auto;
+  }
+
+  .huafu-phrase-term {
+    font-size: 0.98rem;
+  }
+
+  .huafu-phrase-definition {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 420px) {
+  #content-area {
+    padding: 0.85rem;
+  }
+
+  .course-btn,
+  #topic-list .topic-item {
+    max-width: 205px;
+    font-size: 0.86rem;
+  }
+
+  .huafu-hero h2,
+  .huafu-topic-header h2 {
+    font-size: 1.38rem;
   }
 }
