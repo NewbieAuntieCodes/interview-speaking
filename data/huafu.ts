@@ -1,6 +1,7 @@
 export type HuafuPhrase = {
   term: string;
   definition: string;
+  source?: 'extra';
 };
 
 export type HuafuSample = {
@@ -8,6 +9,11 @@ export type HuafuSample = {
   reason: string;
   example: string;
   conclusion: string;
+};
+
+export type HuafuSampleAnswer = HuafuSample & {
+  label: string;
+  tone: 'agree' | 'disagree' | 'balanced';
 };
 
 export type HuafuTopic = {
@@ -28,6 +34,7 @@ export type HuafuTopic = {
     example: string;
   };
   sample: HuafuSample;
+  sampleAnswers?: HuafuSampleAnswer[];
 };
 
 export type HuafuCourseData = {
@@ -526,3 +533,370 @@ export const huafuData: HuafuCourseData = {
     }
   ]
 };
+
+const extra = (term: string, definition: string): HuafuPhrase => ({
+  term,
+  definition,
+  source: 'extra',
+});
+
+const extraKeyPhrasesByTopic: Record<number, HuafuPhrase[]> = {
+  1: [
+    extra('set clear rules', '制定明确规则'),
+    extra('use AI wisely', '明智使用 AI'),
+    extra('check the answer', '检查答案'),
+    extra('write in your own words', '用自己的话写'),
+    extra('ask teachers for help', '向老师求助'),
+    extra('learn step by step', '一步步学习'),
+  ],
+  2: [
+    extra('fake video', '虚假视频'),
+    extra('tell the truth', '辨别真相'),
+    extra('protect personal information', '保护个人信息'),
+    extra('be careful online', '上网要小心'),
+    extra('check before sharing', '分享前先核实'),
+    extra('hurt other people', '伤害他人'),
+    extra('make clear laws', '制定明确法律'),
+    extra('use technology safely', '安全使用科技'),
+  ],
+  3: [
+    extra('watch short videos', '看短视频'),
+    extra('waste too much time', '浪费太多时间'),
+    extra('keep scrolling', '一直刷'),
+    extra('focus on homework', '专心做作业'),
+    extra('take a short break', '短暂休息'),
+    extra('control screen time', '控制屏幕时间'),
+  ],
+  4: [
+    extra('online lessons', '线上课程'),
+    extra('use learning apps', '使用学习软件'),
+    extra('talk with classmates', '和同学交流'),
+    extra('learn in the classroom', '在教室学习'),
+    extra('combine two ways', '结合两种方式'),
+    extra('keep good study habits', '保持好的学习习惯'),
+  ],
+  5: [
+    extra('edited photos', '修过的照片'),
+    extra('real life', '真实生活'),
+    extra('feel less confident', '变得不自信'),
+    extra('care about likes', '在意点赞'),
+    extra('follow positive accounts', '关注积极账号'),
+    extra('be yourself', '做自己'),
+  ],
+  6: [
+    extra('try first', '先自己尝试'),
+    extra('find ideas quickly', '快速找思路'),
+    extra('solve problems by yourself', '自己解决问题'),
+    extra('use AI as a tool', '把 AI 当工具'),
+    extra('not copy directly', '不要直接照抄'),
+    extra('keep practicing', '保持练习'),
+  ],
+  7: [
+    extra('feel stressed', '感到压力大'),
+    extra('talk to someone', '找人聊一聊'),
+    extra('get enough sleep', '睡眠充足'),
+    extra('study with a calm mind', '平静地学习'),
+    extra('ask for support', '寻求支持'),
+    extra('care about feelings', '关注感受'),
+    extra('do better in school', '在学校表现更好'),
+    extra('keep a healthy mind', '保持健康心态'),
+  ],
+  8: [
+    extra('too much homework', '太多作业'),
+    extra('have time for hobbies', '有时间发展爱好'),
+    extra('take enough rest', '充分休息'),
+    extra('learn from pressure', '从压力中学习'),
+    extra('set small goals', '设立小目标'),
+    extra('enjoy school life', '享受校园生活'),
+  ],
+  9: [
+    extra('slow down', '慢下来'),
+    extra('do not give up', '不要放弃'),
+    extra('keep a simple goal', '保持简单目标'),
+    extra('avoid too much comparison', '避免过度比较'),
+    extra('take care of yourself', '照顾自己'),
+    extra('move forward slowly', '慢慢向前'),
+  ],
+  10: [
+    extra('make a clear plan', '制定清晰计划'),
+    extra('learn from life', '从生活中学习'),
+    extra('try new things', '尝试新事物'),
+    extra('know yourself better', '更了解自己'),
+    extra('do useful activities', '做有意义的活动'),
+    extra('return to study', '回到学习中'),
+  ],
+  11: [
+    extra('school counselor', '学校心理老师'),
+    extra('listen to students', '倾听学生'),
+    extra('notice problems early', '及早发现问题'),
+    extra('work with parents', '和家长合作'),
+    extra('give simple help', '提供简单帮助'),
+    extra('safe school life', '安全的校园生活'),
+    extra('share feelings', '分享感受'),
+    extra('not face it alone', '不要独自面对'),
+  ],
+  12: [
+    extra('help people in need', '帮助有需要的人'),
+    extra('join school activities', '参加学校活动'),
+    extra('learn kindness', '学会善意'),
+    extra('work with others', '与他人合作'),
+    extra('choose suitable tasks', '选择合适任务'),
+    extra('serve the community', '服务社区'),
+  ],
+  13: [
+    extra('clean the classroom', '打扫教室'),
+    extra('learn basic life skills', '学习基本生活技能'),
+    extra('help at home', '在家帮忙'),
+    extra('respect hard work', '尊重劳动'),
+    extra('do simple tasks', '做简单任务'),
+    extra('be more independent', '更加独立'),
+  ],
+  14: [
+    extra('buy tickets wisely', '理性买票'),
+    extra('spend money carefully', '谨慎花钱'),
+    extra('relax after exams', '考试后放松'),
+    extra('go with friends', '和朋友一起去'),
+    extra('do not follow blindly', '不要盲目跟风'),
+    extra('keep study first', '学习优先'),
+  ],
+  15: [
+    extra('sort rubbish', '垃圾分类'),
+    extra('save water', '节约用水'),
+    extra('use less plastic', '少用塑料'),
+    extra('join a clean-up activity', '参加清洁活动'),
+    extra('start with small actions', '从小事做起'),
+    extra('make the school cleaner', '让学校更干净'),
+  ],
+};
+
+const sampleAddOnsByTopic: Record<number, { disagree: HuafuSample; balanced: HuafuSample }> = {
+  1: {
+    disagree: {
+      opening: 'I do not think schools should make very strict rules about AI.',
+      reason: 'One reason is that AI can help students learn faster if they use it in the right way.',
+      example: 'For example, students can ask AI to explain a difficult word, but they still write the answer by themselves.',
+      conclusion: 'So schools should give guidance, not only strict punishment.',
+    },
+    balanced: {
+      opening: 'I think schools should allow AI, but they need clear rules.',
+      reason: 'The reason is that AI is useful, but students should not copy answers directly.',
+      example: 'For example, students can use AI to check ideas, and then write in their own words.',
+      conclusion: 'Therefore, the best way is to use AI wisely and honestly.',
+    },
+  },
+  2: {
+    disagree: {
+      opening: 'I do not think deepfake technology is always harmful.',
+      reason: 'One reason is that it can be used for movies, videos, and creative projects.',
+      example: 'For example, a film team can use this technology to make a story more interesting.',
+      conclusion: 'So the technology itself is not the problem; the problem is how people use it.',
+    },
+    balanced: {
+      opening: 'I think deepfake technology has both good and bad sides.',
+      reason: 'It can be creative, but it can also spread fake information.',
+      example: 'For example, it may help in filmmaking, but a fake video may also hurt someone.',
+      conclusion: 'Therefore, we should use it carefully and check information before sharing.',
+    },
+  },
+  3: {
+    disagree: {
+      opening: 'I do not fully agree that recommendation algorithms are always bad.',
+      reason: 'One reason is that short videos can also teach useful information quickly.',
+      example: 'For example, students may watch a short English video and learn a new phrase.',
+      conclusion: 'So the key is self-control, not stopping all short videos.',
+    },
+    balanced: {
+      opening: 'I think short-video algorithms can be useful, but students must control their time.',
+      reason: 'They can give quick information, but too much scrolling hurts concentration.',
+      example: 'For example, watching for ten minutes is fine, but watching for two hours is not healthy.',
+      conclusion: 'Therefore, teenagers should use short videos with a time limit.',
+    },
+  },
+  4: {
+    disagree: {
+      opening: 'I do not think digital learning should become the main form of education.',
+      reason: 'One reason is that students still need face-to-face communication with teachers and classmates.',
+      example: 'For example, group discussion is easier and more natural in a real classroom.',
+      conclusion: 'So traditional classrooms should still play an important role.',
+    },
+    balanced: {
+      opening: 'I think schools should combine digital learning and traditional classrooms.',
+      reason: 'Digital tools are convenient, but classroom learning gives better interaction.',
+      example: 'For example, students can review online after having a face-to-face lesson.',
+      conclusion: 'Therefore, using both ways is better than choosing only one.',
+    },
+  },
+  5: {
+    disagree: {
+      opening: 'I do not think social media always creates unrealistic expectations.',
+      reason: 'One reason is that students can choose positive and useful content online.',
+      example: 'For example, they can follow accounts about study tips, sports, or healthy habits.',
+      conclusion: 'So social media can be helpful if teenagers use it carefully.',
+    },
+    balanced: {
+      opening: 'I think social media can influence teenagers, but it depends on how they use it.',
+      reason: 'Some posts create pressure, while others can give useful ideas.',
+      example: 'For example, edited photos may make students compare themselves, but positive posts can encourage them.',
+      conclusion: 'Therefore, teenagers should follow healthy content and be confident in real life.',
+    },
+  },
+  6: {
+    disagree: {
+      opening: 'I do not think AI must weaken independent thinking.',
+      reason: 'One reason is that AI can explain difficult ideas and help students understand faster.',
+      example: 'For example, a student can ask AI for a simple explanation and then solve the problem by himself.',
+      conclusion: 'So AI can support thinking if students use it as a tool.',
+    },
+    balanced: {
+      opening: 'I think AI can help students, but they should try by themselves first.',
+      reason: 'AI is useful, but using it too early may make students lazy.',
+      example: 'For example, students can think for ten minutes before asking AI for help.',
+      conclusion: 'Therefore, students should use AI after they have tried their own ideas.',
+    },
+  },
+  7: {
+    disagree: {
+      opening: 'I do not think schools should put emotional well-being above academic performance all the time.',
+      reason: 'One reason is that grades are also important for students\' future choices.',
+      example: 'For example, good study habits can help students enter better schools later.',
+      conclusion: 'So schools should still keep clear learning standards.',
+    },
+    balanced: {
+      opening: 'I think schools should care about both mental health and academic performance.',
+      reason: 'Students need good grades, but they also need a healthy mind.',
+      example: 'For example, a stressed student may study hard but still do badly because he feels tired.',
+      conclusion: 'Therefore, schools should balance study goals with emotional support.',
+    },
+  },
+  8: {
+    disagree: {
+      opening: 'I do not think academic pressure is always bad for teenagers.',
+      reason: 'One reason is that some pressure can push students to work harder.',
+      example: 'For example, a small exam goal can help students stay focused and organized.',
+      conclusion: 'So pressure can be useful if it is not too heavy.',
+    },
+    balanced: {
+      opening: 'I think academic pressure can help students, but too much pressure is harmful.',
+      reason: 'Students need goals, but they also need rest and hobbies.',
+      example: 'For example, homework can help learning, but too many extra classes may make students tired.',
+      conclusion: 'Therefore, teenagers should keep a healthy balance between study and life.',
+    },
+  },
+  9: {
+    disagree: {
+      opening: 'I do not think the lying flat attitude is always harmful.',
+      reason: 'One reason is that slowing down can help students reduce stress.',
+      example: 'For example, a student may take a short break and then return to study with a better mood.',
+      conclusion: 'So lying flat is not wrong if it only means taking care of yourself.',
+    },
+    balanced: {
+      opening: 'I think teenagers can slow down, but they should not give up.',
+      reason: 'Rest is important, but students still need simple goals.',
+      example: 'For example, they can study step by step instead of comparing themselves with others all the time.',
+      conclusion: 'Therefore, students should protect their mental health and keep moving forward.',
+    },
+  },
+  10: {
+    disagree: {
+      opening: 'I do not think every teenager should be encouraged to slow down beyond academics.',
+      reason: 'One reason is that some students may lose study motivation without a clear plan.',
+      example: 'For example, if a student takes a gap year but only plays games, the year may be wasted.',
+      conclusion: 'So exploration is useful only when students have a plan.',
+    },
+    balanced: {
+      opening: 'I think exploring life can be good, but teenagers need clear goals.',
+      reason: 'Life experience can help students grow, but study is still important.',
+      example: 'For example, volunteering during a break is useful, but students should also prepare to return to school.',
+      conclusion: 'Therefore, a slower path should be planned carefully.',
+    },
+  },
+  11: {
+    disagree: {
+      opening: 'I do not think schools should be fully responsible for students\' mental health.',
+      reason: 'One reason is that families also know students very well and should offer support.',
+      example: 'For example, parents can listen to their children and help them after school.',
+      conclusion: 'So schools should help, but families and students also have responsibility.',
+    },
+    balanced: {
+      opening: 'I think schools should share the responsibility for students\' mental health.',
+      reason: 'Schools see students every day, but families are also very important.',
+      example: 'For example, teachers may notice stress at school, and parents can give support at home.',
+      conclusion: 'Therefore, schools and families should work together.',
+    },
+  },
+  12: {
+    disagree: {
+      opening: 'I do not think community service should be compulsory for every student.',
+      reason: 'One reason is that forced service may make students less interested in helping others.',
+      example: 'For example, some students may only finish the hours and not really care about the activity.',
+      conclusion: 'So schools should encourage service, but they should also give students choices.',
+    },
+    balanced: {
+      opening: 'I think community service is useful, but it should be flexible.',
+      reason: 'Students can learn responsibility, but they should choose suitable activities.',
+      example: 'For example, some students may like charity work, while others may prefer environmental projects.',
+      conclusion: 'Therefore, community service should be encouraged with different choices.',
+    },
+  },
+  13: {
+    disagree: {
+      opening: 'I do not think labor education should take too much school time.',
+      reason: 'One reason is that students already have heavy academic work.',
+      example: 'For example, if students spend too much time on extra tasks, they may have less time to review lessons.',
+      conclusion: 'So labor education should be simple and not add too much pressure.',
+    },
+    balanced: {
+      opening: 'I think labor education is helpful, but it should be simple and meaningful.',
+      reason: 'Students need life skills, but they also need time for study.',
+      example: 'For example, cleaning the classroom once a week can build responsibility without taking too much time.',
+      conclusion: 'Therefore, schools should include labor education in a light way.',
+    },
+  },
+  14: {
+    disagree: {
+      opening: 'I do not think large entertainment events are mostly bad for teenagers.',
+      reason: 'One reason is that concerts can help students relax and enjoy culture.',
+      example: 'For example, after exams, going to a concert with friends can be a happy memory.',
+      conclusion: 'So entertainment is fine if students spend money carefully.',
+    },
+    balanced: {
+      opening: 'I think entertainment events can be good, but teenagers should be responsible.',
+      reason: 'They can help students relax, but too much spending is not wise.',
+      example: 'For example, buying one ticket is fine, but buying many expensive items may create pressure.',
+      conclusion: 'Therefore, teenagers should enjoy entertainment without following trends blindly.',
+    },
+  },
+  15: {
+    disagree: {
+      opening: 'I do not think teenagers should spend too much time on environmental activities.',
+      reason: 'One reason is that students also need to focus on their studies.',
+      example: 'For example, joining a clean-up activity every day may take too much time from homework.',
+      conclusion: 'So students should help the environment in simple daily ways.',
+    },
+    balanced: {
+      opening: 'I think teenagers should protect the environment, but they should keep a balance.',
+      reason: 'Small actions are useful, but schoolwork is also important.',
+      example: 'For example, students can sort rubbish and save water without spending too much extra time.',
+      conclusion: 'Therefore, teenagers should start with small actions and balance their studies.',
+    },
+  },
+};
+
+const buildSampleAnswers = (topic: HuafuTopic): HuafuSampleAnswer[] => {
+  const addOns = sampleAddOnsByTopic[topic.id];
+  if (!addOns) {
+    return [{ label: 'Agree 正方', tone: 'agree', ...topic.sample }];
+  }
+
+  return [
+    { label: 'Agree 正方', tone: 'agree', ...topic.sample },
+    { label: 'Disagree 反方', tone: 'disagree', ...addOns.disagree },
+    { label: 'Balanced 平衡', tone: 'balanced', ...addOns.balanced },
+  ];
+};
+
+huafuData.topics = huafuData.topics.map(topic => ({
+  ...topic,
+  keyPhrases: [...topic.keyPhrases, ...(extraKeyPhrasesByTopic[topic.id] ?? [])],
+  sampleAnswers: buildSampleAnswers(topic),
+}));

@@ -8,6 +8,7 @@ import type {
   BasisQuiz,
   HuafuCourseData,
   HuafuPhrase,
+  HuafuSampleAnswer,
   HuafuTopic
 } from './data.ts';
 
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     phrases.forEach(phrase => {
       const item = document.createElement('div');
-      item.className = 'huafu-phrase-card';
+      item.className = `huafu-phrase-card ${phrase.source === 'extra' ? 'extra' : ''}`.trim();
 
       const term = document.createElement('div');
       term.className = 'huafu-phrase-term';
@@ -111,6 +112,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     return grid;
+  };
+
+  const getSampleAnswers = (topic: HuafuTopic): HuafuSampleAnswer[] => {
+    return topic.sampleAnswers ?? [
+      {
+        label: 'Agree 正方',
+        tone: 'agree',
+        ...topic.sample,
+      },
+    ];
   };
 
   const createHuafuBulletPanel = (title: string, items: string[], tone: 'for' | 'against') => {
@@ -310,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const phraseTitle = document.createElement('h3');
     phraseTitle.textContent = '核心词组 Key Phrases';
     phraseSection.appendChild(phraseTitle);
-    phraseSection.appendChild(createHuafuPhraseGrid(topic.keyPhrases));
+    phraseSection.appendChild(createHuafuPhraseGrid(topic.keyPhrases, 'dense'));
     page.appendChild(phraseSection);
 
     const expressions = document.createElement('section');
@@ -345,10 +356,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const sampleTitle = document.createElement('h3');
     sampleTitle.textContent = '示范例句 Sample Answer';
     sample.appendChild(sampleTitle);
-    sample.appendChild(createHuafuSampleLine('Opening', topic.sample.opening));
-    sample.appendChild(createHuafuSampleLine('Reason', topic.sample.reason));
-    sample.appendChild(createHuafuSampleLine('Example', topic.sample.example));
-    sample.appendChild(createHuafuSampleLine('Conclusion', topic.sample.conclusion));
+
+    const sampleList = document.createElement('div');
+    sampleList.className = 'huafu-sample-answer-list';
+    getSampleAnswers(topic).forEach(answer => {
+      const answerBlock = document.createElement('article');
+      answerBlock.className = `huafu-sample-answer ${answer.tone}`;
+
+      const heading = document.createElement('h4');
+      heading.className = 'huafu-sample-answer-title';
+      heading.textContent = answer.label;
+      answerBlock.appendChild(heading);
+
+      answerBlock.appendChild(createHuafuSampleLine('Opening', answer.opening));
+      answerBlock.appendChild(createHuafuSampleLine('Reason', answer.reason));
+      answerBlock.appendChild(createHuafuSampleLine('Example', answer.example));
+      answerBlock.appendChild(createHuafuSampleLine('Conclusion', answer.conclusion));
+      sampleList.appendChild(answerBlock);
+    });
+    sample.appendChild(sampleList);
     page.appendChild(sample);
 
     const universal = document.createElement('section');

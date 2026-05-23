@@ -25,7 +25,7 @@ import { topic as topic15 } from './data/topic15.ts';
 import { advancedTopics } from './data/advanced.ts';
 import { appContentData } from './data/basis/topicsData.ts';
 import { huafuData } from './data/huafu.ts';
-import type { HuafuCourseData, HuafuPhrase, HuafuSample, HuafuTopic } from './data/huafu.ts';
+import type { HuafuCourseData, HuafuPhrase, HuafuSample, HuafuSampleAnswer, HuafuTopic } from './data/huafu.ts';
 
 export type { Question, Topic };
 export type {
@@ -38,6 +38,7 @@ export type {
   HuafuCourseData,
   HuafuPhrase,
   HuafuSample,
+  HuafuSampleAnswer,
   HuafuTopic
 };
 
